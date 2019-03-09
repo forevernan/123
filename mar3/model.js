@@ -16,12 +16,12 @@ class Stage {
 		// this.addPlayer(new Player(this, Math.floor(this.width/2), Math.floor(this.height/2)));
 	
 		// Add in some Balls
-		var total=1;
+		var total=0;
 		while(total>0){
 			var x=Math.floor((Math.random()*this.width)); 
 			var y=Math.floor((Math.random()*this.height)); 
 			if(this.getActor(x,y)===null){
-				var velocity = new Pair(20, 20);
+				var velocity = new Pair(rand(20), rand(20));
 				var red=randint(255), green=randint(255), blue=randint(255);
 				var radius = randint(20);
 				var alpha = Math.random();
@@ -39,6 +39,14 @@ class Stage {
 		var midPosition = new Pair(x, y);
 		var p1 = new Player(this, midPosition);
 		this.addPlayer(p1);
+
+		//add Amunition
+
+		// if (addBullet){
+			// var amunition = new Amunition("smallBullet", new Pair(Math.sin(p1.angle), Math.cos(p1.angle)), new Pair(p1.x - 6, p1.y + 100));
+			// this.addActor(amunition);
+			// addBullet = false;
+		// }
 		
 	}
 
@@ -66,8 +74,15 @@ class Stage {
 	// Take one step in the animation of the game.  Do this by asking each of the actors to take a single step. 
 	// NOTE: Careful if an actor died, this may break!
 	step(){
+		// if (addBullet){
+		// 	var velocity = new Pair(Math.sin(this.player.angle), Math.cos(this.player.angle));
+		// 	var amunition = new Amunition("smallBullet", velocity, new Pair(this.player.x - 6, this.player.y + 100));
+		// 	this.addActor(amunition);
+		// 	addBullet = false;
+		// }
 		for(var i=0;i<this.actors.length;i++){
 			this.actors[i].step();
+			// console.log(this.actors[i].velocity);
 		}
 	}
 
@@ -164,108 +179,6 @@ class Ball {
 	}
 }
 
-class Player {
-	constructor(stage, position){
-		this.stage = stage;
-		this.weapon = "hand";
-		// this.health = health;
-		// this.direction = direction;
-		// this.amunition = amunition;
-		this.position = position;
-		this.intPosition();
-		this.radius = 20;
-		this.image = ["player"].concat(this.weapon);
-		this.bag = null;
-		this.hitting = false;
-	}
 
-	hit(){
-		if (!this.hitting){
-			console.log("ccccccccc");
-			this.hitting = true;
-			// this.weapon = "leftHit";
-			setTimeout(this.stopHitting, 500);
-		}
-	}
-
-	stopHitting(){
-		console.log('111');
-		this.hitting = false;
-		// this.weapon = "longgun";
-		// setTimeout(this.stopHitting(), 10000);
-		console.log(this.weapon);
-		console.log(this.hitting);
-	}
-
-	move(dx, dy){
-		this.x += 10 * dx;
-		this.y += 10 * dy;
-
-		if(this.x < 20){
-			this.x = 20;
-		}
-		if(this.x>this.stage.width-20){
-			this.x=this.stage.width-20;
-		}
-		if(this.y<20){
-			this.y=20;
-		}
-		if(this.y>this.stage.height-20){
-			this.y=this.stage.height-20;
-		}
-
-
-	}
-
-	intPosition(){
-		this.x = Math.round(this.position.x);
-		this.y = Math.round(this.position.y);
-	}
-
-	step(){
-
-	}
-
-	drawOnePart(context, dx, dy, part){
-		var image = new Image();
-		image.src = "icons/" + part + ".png";
-		context.drawImage(image, this.x + dx, this.y + dy);
-	}
-
-
-	draw(context){
-
-		if (this.bag){
-			this.drawOnePart(context, -75, -80, this.bag);
-		}
-		this.drawOnePart(context, -40, -40, "player");
-		console.log(this.hitting);
-		// this.drawOnePart(context, -75, -75, this.weapon);
-
-		if (this.hitting){
-			this.drawOnePart(context, -75, -75, "leftHit");
-		} else {
-			this.drawOnePart(context, -75, -75, "hand");
-		}
-		// this.drawOnePart(context, -75, -75, "bag");
-
-		// var image = new Image();
-		// image.src = 'icons/player.png';
-		// context.drawImage(image, this.x, this.y, 50, 40);
-
-		// var image = new Image();
-		// image.src = 'icons/hand.png';
-		// context.drawImage(image, this.x, this.y - 40, 50, 40);
-
-
-		// context.fillStyle = 'black';
-		// context.beginPath(); 
-		// context.arc(this.x, this.y, 20, 0, 2 * Math.PI, false); 
-		// context.fill(); 
-
-
-	}
-
-}
 
 
