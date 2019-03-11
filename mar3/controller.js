@@ -33,7 +33,7 @@ function changeWeaponByKey(event){
 function dropWeaponByKey(event){
 	var key = event.key;
 	var currentWeapon = stage.player.weapon;
-	console.log(currentWeapon);
+	// console.log(currentWeapon);
 	if (key == 'r'){
 		stage.player.changeWeapon(stage.player.hand);
 		if (currentWeapon.toString() == "shortgun"){

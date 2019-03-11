@@ -66,7 +66,7 @@ class SideBar{
 		}
 
 		//heath part
-		context.fillRect(this.x - 500, this.y + 100, this.stage.player.health * 4, 30);
+		context.fillRect(this.x - 600, this.y + 130, this.stage.player.health * 4, 30);
 
 
 		// context.restore();

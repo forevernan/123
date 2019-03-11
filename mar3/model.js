@@ -8,9 +8,9 @@ class Stage {
 		// ===============================================
 		// setup an object that represents the room
 		this.room = {
-			width: 5000,
+			width: 3000,
 			height: 3000,
-			map: new Map(5000, 3000)
+			map: new Map(3000, 3000)
 		};
 		// generate a large image texture for the room
 		this.room.map.generate();
@@ -23,6 +23,7 @@ class Stage {
 		// the logical width and height of the stage
 		this.width = canvas.width;
 		this.height = canvas.height;
+		this.AI = 0
 
 		// Add the player to the center of the stage
 		// this.addPlayer(new Player(this, Math.floor(this.width/2), Math.floor(this.height/2)));
@@ -37,23 +38,23 @@ class Stage {
 		// ==================================================
 
 		//Add objects
-		var smallGunObject = new MapObject(this, new Pair(200 , 400), "shortgunObject")
-		var longGunObject = new MapObject(this, new Pair(600 , 400), "longgunObject")
-		var bagObject = new MapObject(this, new Pair(200 , 200), "bagObject")
-		var smallBulletObject = new MapObject(this, new Pair(400, 200), "smallBulletObject")
-		var bigBulletObject = new MapObject(this, new Pair(200, 600), "bigBulletObject")
-		this.addActor(smallGunObject);
-		this.addActor(longGunObject);
-		this.addActor(bagObject);
-		this.addActor(smallBulletObject);
-		this.addActor(bigBulletObject);
+		// var smallGunObject = new MapObject(this, new Pair(200 , 400), "shortgunObject")
+		// var longGunObject = new MapObject(this, new Pair(600 , 400), "longgunObject")
+		// var bagObject = new MapObject(this, new Pair(200 , 200), "bagObject")
+		// var smallBulletObject = new MapObject(this, new Pair(400, 200), "smallBulletObject")
+		// var bigBulletObject = new MapObject(this, new Pair(200, 600), "bigBulletObject")
+		// this.addActor(smallGunObject);
+		// this.addActor(longGunObject);
+		// this.addActor(bagObject);
+		// this.addActor(smallBulletObject);
+		// this.addActor(bigBulletObject);
 
 
 		//Add player
 		var x = Math.floor(this.width / 2);
 		var y = Math.floor(this.height / 2);
 		var midPosition = new Pair(x, y);
-		var p1 = new Player(this, midPosition, "Player");
+		var p1 = new Player(this, new Pair(100 , 400), "Player");
 		this.addPlayer(p1);
 
 		// setup the magic camera !!!
@@ -61,14 +62,21 @@ class Stage {
 		this.camera.follow(p1, x, y);
 
 		//Add sidebar
-		var sidebar = new SideBar(this, new Pair(700, 600), "weapon");
+		var sidebar = new SideBar(this, new Pair(900, 780), "weapon");
 		this.addActor(sidebar);
 
 		//Add ai
-		var npc1 = new Player(this, new Pair(100 , 400), "AI");
+		this.addAI();
+
+
+
+	}
+
+
+	addAI(){
+		var npc1 = new Player(this, new Pair(400, 400), "AI");
 		this.addActor(npc1);
-
-
+		this.AI += 1;
 
 	}
 
@@ -99,15 +107,18 @@ class Stage {
 		for (var i = 0; i < this.actors.length; i++) {
 			this.actors[i].step();
 			var currentActor = this.actors[i];
+			// if (currentActor && currentActor.toString() == "AI"){
+			// 	this.AI += 1;
+			// }
 			// console.log(this.actors);
 			// console.log(this.actors[i].position);
 			// if(currentActor.toString() != "Player"){
 			// 	console.log(currentActor.getRange());
 			// }
 			// console.log(currentActor, currentActor.toString());
-			if((currentActor && currentActor.constructor.name == "Amunition") && currentActor.getRange()== 0){
-				this.removeActor(currentActor);
-			}
+			// if((currentActor && currentActor.constructor.name == "Amunition") && currentActor.getRange() <= 0){
+			// 	this.removeActor(currentActor);
+			// }
 		}
 		this.camera.step();
 	}
@@ -116,16 +127,21 @@ class Stage {
 		var context = this.canvas.getContext('2d');
 		context.clearRect(0, 0, this.width, this.height);
 		this.room.map.draw(context, this.camera.xView, this.camera.yView);
+
+		context.font = "20pt Calibri";
+		context.fillStyle = 'red';
+		context.fillText(10 - this.AI, 10, 30);
+
 		for (var i = 0; i < this.actors.length; i++) {
-			if (this.actors[i].constructor.name == "Player"){
+			if (this.actors[i] != this.player) {
 				this.actors[i].draw(context, this.camera.xView, this.camera.yView);
 			}
-			else{
-				// console.log(this.actors[i].position);
-				this.actors[i].draw(context);
-			}
-			
+			// else{
+			// 	// console.log(this.actors[i].position);
+			// 	this.actors[i].draw(context);
+			// }
 		}
+		this.player.draw(context, this.camera.xView, this.camera.yView);
 	}
 
 	// return the first actor at coordinates (x,y) return null if there is no such actor
