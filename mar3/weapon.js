@@ -1,4 +1,3 @@
-
 class Weapon{
 	constructor(gunType, range, damage){
 		this.gunType = gunType;
