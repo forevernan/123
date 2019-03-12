@@ -66,6 +66,16 @@ class SideBar{
 			context.drawImage(imageLonggun, this.x + 40, this.y + 75 , 32, 32);
 		}
 
+		context.fillText('4', this.x, this.y + 150);
+		var imageSmallStone = new Image();
+		imageSmallStone.src = "icons/" + "smallStone.png";
+		context.drawImage(imageSmallStone, this.x + 40, this.y + 125 , 32, 32);
+
+		context.fillText('5', this.x, this.y + 200);
+		var imageBigStone = new Image();
+		imageBigStone.src = "icons/" + "bigStone.png";
+		context.drawImage(imageBigStone, this.x + 40, this.y + 175 , 32, 32);
+
 		//heath part
 		context.fillRect(this.x - 600, this.y + 130, this.stage.player.health * 4, 30);
 

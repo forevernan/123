@@ -10,6 +10,7 @@ function setupGame() {
 	document.addEventListener('mousemove', moveByMouse);
 	document.addEventListener('keydown', changeWeaponByKey);
 	document.addEventListener('keydown', dropWeaponByKey);
+	document.addEventListener('keydown', buildStone);
 
 }
 function startGame() {
@@ -35,9 +36,10 @@ function dropWeaponByKey(event){
 	var currentWeapon = stage.player.weapon;
 	// console.log(currentWeapon);
 	if (key == 'r'){
-		stage.player.changeWeapon(stage.player.hand);
+		console.log("gaidiule", currentWeapon.toString(), stage.player.hand);
+		
 		if (currentWeapon.toString() == "shortgun"){
-			stage.player.dropWeapon("shortgun");
+			stage.player.dropWeapon(stage.player.shortgun);
 			var smallGunObject = new MapObject(stage, new Pair(stage.player.x + 70, stage.player.y - 30), "shortgunObject")
 			stage.addActor(smallGunObject);
 			// console.log(stage.player.shortgun);
@@ -47,6 +49,7 @@ function dropWeaponByKey(event){
 			var bigGunObject = new MapObject(stage, new Pair(stage.player.x + 70, stage.player.y - 30), "longgunObject")
 			stage.addActor(bigGunObject);
 		}
+		stage.player.changeWeapon(stage.player.hand);
 	}
 	// } else if (key == '2' && stage.player.longgun != null){
 	// 	stage.player.changeWeapon(stage.player.longgun);
@@ -54,6 +57,18 @@ function dropWeaponByKey(event){
 	// 	stage.player.changeWeapon(stage.player.shortgun);
 	// }
 
+}
+
+function buildStone(event){
+	var key = event.key;
+	if (key == '4'){
+		var smallStone = new StoneObject(stage, new Pair(stage.player.x + 70, stage.player.y - 50), "smallStone");
+		stage.addActor(smallStone);
+	}
+	if (key == '5'){
+		var bigStone = new StoneObject(stage, new Pair(stage.player.x + 70, stage.player.y - 70), "bigStone");
+		stage.addActor(bigStone);
+	}
 }
 
 
