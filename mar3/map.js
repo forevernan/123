@@ -34,7 +34,7 @@ class Map {
 
         // store the generate map as this image texture
         this.image = new Image();
-        this.image.src = "icons/map.png";
+        this.image.src = "icons/river.png";
         // clear context
         // ctx = null;
     }

@@ -17,6 +17,7 @@ class SideBar{
     }
 
 	draw(context){
+		// console.log(a);
 		// context.save();
 		// context.beginPath();
 		// var image = new Image();

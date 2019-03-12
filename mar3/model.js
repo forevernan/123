@@ -37,17 +37,17 @@ class Stage {
 
 		// ==================================================
 
-		//Add objects
-		// var smallGunObject = new MapObject(this, new Pair(200 , 400), "shortgunObject")
-		// var longGunObject = new MapObject(this, new Pair(600 , 400), "longgunObject")
-		// var bagObject = new MapObject(this, new Pair(200 , 200), "bagObject")
-		// var smallBulletObject = new MapObject(this, new Pair(400, 200), "smallBulletObject")
-		// var bigBulletObject = new MapObject(this, new Pair(200, 600), "bigBulletObject")
-		// this.addActor(smallGunObject);
-		// this.addActor(longGunObject);
-		// this.addActor(bagObject);
-		// this.addActor(smallBulletObject);
-		// this.addActor(bigBulletObject);
+		// Add objects
+		var smallGunObject = new MapObject(this, new Pair(200 , 400), "shortgunObject")
+		var longGunObject = new MapObject(this, new Pair(600 , 400), "longgunObject")
+		var bagObject = new MapObject(this, new Pair(200 , 200), "bagObject")
+		var smallBulletObject = new MapObject(this, new Pair(400, 200), "smallBulletObject")
+		var bigBulletObject = new MapObject(this, new Pair(200, 600), "bigBulletObject")
+		this.addActor(smallGunObject);
+		this.addActor(longGunObject);
+		this.addActor(bagObject);
+		this.addActor(smallBulletObject);
+		this.addActor(bigBulletObject);
 
 
 		//Add player
@@ -68,6 +68,12 @@ class Stage {
 		//Add ai
 		this.addAI();
 
+		//add stone
+		var stone = new StoneObject(this, new Pair(200, 100), "smallStone");
+		this.addActor(stone);
+
+		var stone2 = new StoneObject(this, new Pair(400, 100), "bigStone");
+		this.addActor(stone2);
 
 
 	}
@@ -142,6 +148,7 @@ class Stage {
 			// }
 		}
 		this.player.draw(context, this.camera.xView, this.camera.yView);
+		console.log(this.player.x, this.player.y);
 	}
 
 	// return the first actor at coordinates (x,y) return null if there is no such actor

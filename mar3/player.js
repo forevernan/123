@@ -17,12 +17,12 @@ class Player {
 
       //weapon part
       this.hand = new Weapon("hand", 10, 10);
-      this.longgun = null;
+      this.longgun = new Weapon("longgun", 10, 10);
       this.shortgun = new Weapon("shortgun", 10, 10);
-      this.weapon = this.shortgun;
+      this.weapon = this.longgun;
 
       this.smallBullet = 100;
-      this.bigBullet = 0;
+      this.bigBullet = 100;
       this.health = 100;
       // this.direction = direction;
       // this.amunition = amunition;
@@ -37,7 +37,16 @@ class Player {
 
 
   gameOver(){
-    this.died = true;
+    this.stage.addActor(new MapObject(this.stage, new Pair(this.x - 35, this.y - 35), "grave"));  
+    if (this.toString() == "AI"){
+      this.stage.AI -= 1;
+      this.stage.removeActor(this);
+    }
+    if (this.toString() == "Player"){
+      this.stage.removePlayer();
+      // this.stage.addActor(new MapObject(this.stage, new Pair(this.x - 35, this.y - 35), "grave"));
+      // pauseGame();
+    }
   }
 
   toString(){
@@ -75,7 +84,7 @@ class Player {
 
     // var xRange1 = [this.x - 65, this.x + 40]
     // var yRange1 = [this.y - 100, this.y + 40]
-    context.strokeRect(this.cam_x - 300, this.cam_y - 300, 600, 600);
+    context.strokeRect(this.cam_x -40 , this.cam_y -40, 80, 80);
 
 
     //draw scores
@@ -115,6 +124,10 @@ class Player {
 
   step(){
     // console.log(this.toString(), this.health, this.x, this.y);
+    if (this.health <= 0){
+      this.gameOver();
+      // pauseGame();
+    }
 
     //AI move
     if (this.type == "AI"){
@@ -124,10 +137,10 @@ class Player {
       var endAy = this.y + 300;
       var p1 = this.stage.player;
 
-      console.log(startAx, endAx, startAy, endAy);
-      console.log("p1: ", p1.x, "p2: ", p1.y);
+      // console.log(startAx, endAx, startAy, endAy);
+      // console.log("p1: ", p1.x, "p2: ", p1.y);
 
-      if (p1.x > startAx && p1.x < endAx && p1.y > startAy && p1.y < endAy){
+      if (p1 && p1.x > startAx && p1.x < endAx && p1.y > startAy && p1.y < endAy){
         this.rotate(p1.cam_x, p1.cam_y);
         
         var randNum = Math.floor(rand(50));
@@ -136,6 +149,8 @@ class Player {
           this.fire();
         }
         console.log(this.angle);
+      } else {
+        this.move(0.1, 0.1);
       }
 
 
@@ -165,22 +180,23 @@ class Player {
     }
 
 
-    if (this.died == true){
-      if (this.toString() == "AI"){
-        this.stage.AI -= 1;
-      }
-      this.stage.addActor(new MapObject(this.stage, new Pair(this.x - 35, this.y - 35), "grave"))
-      this.stage.removeActor(this);
-    }
-    if (this.health <= 0){
-      this.gameOver();
-    }
+    // if (this.died == true){
+    //   if (this.toString() == "AI"){
+    //     this.stage.AI -= 1;
+    //   r1}
+    //   this.stage.addActor(new MapObject(this.stage, new Pair(this.x - 35, this.y - 35), "grave"))
+    //   this.stage.removeActor(this);
+    //   if (this.toString == "Player"){
+    //     this.stage.removePlayer();
+    //   }
+    // }
+
     var xRange = [this.x - 40 - 65, this.x + 100]
     var yRange = [this.y - 40 - 60, this.y + 40]
 
 
-    // var xRange1 = [this.x - 40 - 30, this.x + 40]
-    // var yRange1 = [this.y - 45 -10 , this.y + 40]
+    var xRange1 = [this.x - 40 - 30, this.x + 40]
+    var yRange1 = [this.y - 45 -10 , this.y + 40]
     var xstart = this.x - 40 - 30;
     var xend = this.x + 40;
     var ystart = this.y - 55;
@@ -204,10 +220,11 @@ class Player {
       }
 
       //pick up items////////////
-      if (currentActor.constructor.name == "MapObject" && this.toString == "Player"){
+      if (currentActor.constructor.name == "MapObject" && this.toString() == "Player"){
         var xObject = currentActor.x;
         var yObject = currentActor.y;
         if ( xObject > xRange[0] && xObject < xRange[1] && yObject > yRange[0] && yObject < yRange[1]){
+          console.log("jinqulr1111");
           if (currentActor.toString() == "bagObject" && this.bag == null){
             this.bag = "bag";
             this.stage.removeActor(currentActor);
@@ -269,6 +286,10 @@ class Player {
   }
 
   move(dx, dy) {
+    if (this.x <= 1120 && this.x >= 600){
+      this.x += 1 * dx;
+      this.y += 1 * dy;
+    }
     this.x += 20 * dx;
     this.y += 20 * dy;
 
@@ -303,13 +324,28 @@ class Player {
       setTimeout(this.stopFireing, 200);
     }
     if(this.weapon.toString() == "longgun" && this.bigBullet != 0){
-      var startX = this.cam_x + (Math.cos(this.angle) - 100 * Math.sin(this.angle));
-      var startY = this.cam_y + (Math.sin(this.angle) + 100 * Math.cos(this.angle));
+      var startX = this.x + (Math.cos(this.angle) - 100 * Math.sin(this.angle));
+      var startY = this.y + (Math.sin(this.angle) + 100 * Math.cos(this.angle));
 
       var angle = new Pair(-Math.sin(this.angle), Math.cos(this.angle));
       // if (this.angle)
+      if (this.angle >= -3.14 && this.angle <= -1.88){
+        startX -= 10;
+        startY -= 20;
+      } else if (this.angle >= -1.88 && this.angle <= -1){
+        startX -= 10;
+        startY -= 30;
+      }
+      else if (this.angle >= 0.2 && this.angle <= 1.7){
+        startX -= 20;
+        startY -= 10;
+      }
+      else if (this.angle >= -5 && this.angle <= -3.1){
+        startX -= 20;
+        startY -= 20;
+      }
       var startPos = new Pair(startX, startY);
-      var amunition = new Amunition(this.stage, "bigBullet", angle, startPos, 40, 10);
+      var amunition = new Amunition(this.stage, "bigBullet", angle, startPos, 40, 20);
       this.stage.addActor(amunition);
       this.bigBullet -= 1;
     }
@@ -318,7 +354,6 @@ class Player {
       var startY = this.y + (Math.sin(this.angle) + 100 * Math.cos(this.angle));
 
       var angle = new Pair(-Math.sin(this.angle), Math.cos(this.angle));
-      var startPos = new Pair(startX, startY);
       if (this.angle >= -3.14 && this.angle <= -1.88){
         startX -= 10;
         startY -= 20;
@@ -336,7 +371,7 @@ class Player {
       }
       var startPos = new Pair(startX, startY);
 
-      var amunition = new Amunition(this.stage, "smallBullet", angle, startPos, 20, 20);
+      var amunition = new Amunition(this.stage, "smallBullet", angle, startPos, 20, 10);
       this.stage.addActor(amunition);
       this.smallBullet -= 1;
     }
